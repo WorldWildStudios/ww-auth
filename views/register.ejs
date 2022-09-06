@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../parts/headers.ejs') %>
+    <title>Register | WW-Auth Beta</title>
+</head>
+<body>
+    <h1>
+       Register
+    </h1>
+    <form action="POST">
+        <div class="field">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username">
+        </div>
+        <div class="field">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email">
+        </div>
+        <div class="field">
+            <label for="phone">Phone</label>
+            <input type="text" name="phone" id="phone" placeholder="Phone">
+        </div>
+        <div class="field">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password">
+        </div>
+        <div class="field">
+            <label for="password_confirmation">Password Confirmation</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation">
+        </div>
+        <input type="submit" value="Register">
+    </form>
+    <!-- Placeholder href -->
+</body>
+</html>

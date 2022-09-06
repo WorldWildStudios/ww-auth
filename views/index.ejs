@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../parts/headers.ejs') %>
+    <title>WW-Auth Beta</title>
+</head>
+<body>
+    <h1>
+        WorldWild-Auth
+    </h1>
+    <h3>Worldwild Studios introduce WorldWild-Auth: A unique website to login into all WorldWild applications and even more.</h3>
+    <a href="/register" class="btn btn-primary ripple">Create your WorldWildID</a>
+    <a href="/docs" class="btn btn-primary ripple">WorldWild-Auth for developpers</a>
+    <% for (let user of users) { %>
+        <h1><%= user.password %></h1>
+        <h1><%= password %></h1>
+    <% } %>
+    <!-- Placeholder href -->
+</body>
+</html>
