@@ -1,13 +1,13 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
 import path from 'path';
-import { DataSource } from 'typeorm';
 import config from './config.js';
 import 'reflect-metadata';
-import Users from './models/entities/Users.js';
 import hash from './structures/Hash.js';
 import Logger from './structures/Logger.js';
 import session from 'express-session';
+import {DB, users} from './models/entities/Database.js';
 import * as url from 'url';
+import registerPost from './controllers/RegisterPost.js';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 
@@ -22,24 +22,12 @@ const logger = new Logger({
     },
     logsaving: {
         path: './logs',
-        enabled: false
+        enabled: false,
     }
 });
 
 
-const DB = new DataSource({
-    "type": "mssql",
-    "host": config.host,
-    "username": config.username,
-    "password": config.password,
-    "port": config.dbport,
-    "database": "wwauth", //"ww_auth_db",
-    "entities": [Users],
-    "extra": {
-        "encrypt": true,
-        "trustServerCertificate": false
-    }
-});
+
 
 
 DB.initialize().then(() => {
@@ -48,9 +36,6 @@ DB.initialize().then(() => {
 
 
 const port = config.port || 80;
-const users = DB.getRepository(Users);
-
-
 
 const app = express();
 
@@ -63,9 +48,10 @@ app.listen(port, () => {
     logger.info('listening on port 80', 'Express');
 });
 
+app.post('/register', registerPost);
 
 app.get('/', async (req, res) => {
-    let createdUser: Users = new Users();
+    /*let createdUser: Users = new Users();
     createdUser.username = "Wesh";
     createdUser.lastName = "Ribo";
     createdUser.firstName = 'Paul';
@@ -73,7 +59,7 @@ app.get('/', async (req, res) => {
     createdUser.avatarUUID = "24164325324eds524103zqe5swx";
     createdUser.email = 'uwu@gmail.com';
     createdUser.password = hash("HuskyDeLaStreet");
-    await users.save(createdUser);
+    await users.save(createdUser);*/
     
     const usersR = await users.find();
     
@@ -119,6 +105,7 @@ app.use(session({
     cookie: { secure: true }
 }));
 
+app.use(urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   const error = new Err("Not found");
@@ -126,7 +113,10 @@ app.use((req, res, next) => {
   next(error);
 });
 
+// Log each request.. I don't know how to do it with express sadly
+
 app.use((error: Err, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.error(error.stack??"ERROR WHILE ROUTING", 'Express');
     if(error.status === 404) {
         res.status(404).render("404");
     } else {

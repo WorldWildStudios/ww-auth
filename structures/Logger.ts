@@ -90,7 +90,7 @@ export default class Logger {
      * @param process The optionnal process of the log
      * @returns The formatted message
      */
-     public formatMessage(message: string, type: ('info' | 'debug' | 'warn' | 'fatal' | 'error'), process?: string): string {
+     public formatMessage(message: string, type: ('info' | 'debug' | 'warn' | 'fatal' | 'error'), process?: string): [string, string] {
         this.refreshDates();
         const loggernamecolor = this.colors.loggernamecolor;
         const processcolor = this.colors.processcolor;
@@ -113,9 +113,9 @@ export default class Logger {
         const formattedMessage = `[${this.formattedDate}] [${type.toUpperCase()}${process ? ` / ${process}` : ''}] ${type.toUpperCase()} ▪ ${message}`;
 
         if(this.options.logconsole.colored) {
-            return `${chalk.hex(grey)('[')}${chalk.hex(blue)(this.formattedDate)}${chalk.hex(grey)(']')} ${chalk.hex(grey)('[')}${chalk.hex(loggernamecolor)(this.options.name)}${process ? chalk.hex(grey)(' / ') : ''}${process ? chalk.hex(processcolor)(process) : ''}${chalk.hex(grey)(']')} ${highlight ? chalk.bgHex(background)(chalk.hex(colorlight)(type.toUpperCase())) : chalk.hex(colorlight)(type.toUpperCase())} ${chalk.hex(grey)('▪')} ${chalk.hex(color)(message)}`;
+            return [`${chalk.hex(grey)('[')}${chalk.hex(blue)(this.formattedDate)}${chalk.hex(grey)(']')} ${chalk.hex(grey)('[')}${chalk.hex(loggernamecolor)(this.options.name)}${process ? chalk.hex(grey)(' / ') : ''}${process ? chalk.hex(processcolor)(process) : ''}${chalk.hex(grey)(']')} ${highlight ? chalk.bgHex(background)(chalk.hex(colorlight)(type.toUpperCase())) : chalk.hex(colorlight)(type.toUpperCase())} ${chalk.hex(grey)('▪')} ${chalk.hex(color)(message)}`, formattedMessage];
         } else {
-            return formattedMessage;
+            return [formattedMessage, formattedMessage];
         };
     };
 
@@ -127,43 +127,43 @@ export default class Logger {
     };
 
     info(message: string, process: string): void {
-        const formattedMessage = this.formatMessage(message, 'info', process);
+        const [formattedMessage, black_and_white] = this.formatMessage(message, 'info', process);
         this.refreshDates();
 
         if(this.options.logconsole.enabled) console.info(formattedMessage);
-        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${formattedMessage}\n`);
+        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
     error(message: string, process: string): void {
-        const formattedMessage = this.formatMessage(message, 'error', process);
+        const [formattedMessage, black_and_white] = this.formatMessage(message, 'error', process);
         this.refreshDates();
 
         if(this.options.logconsole.enabled) console.error(formattedMessage);
-        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${formattedMessage}\n`);
+        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
     fatal(message: string, optionnalprocess: string):void {
-        const formattedMessage = this.formatMessage(message, 'fatal', optionnalprocess);
+        const [formattedMessage, black_and_white] = this.formatMessage(message, 'fatal', optionnalprocess);
         this.refreshDates();
 
         if(this.options.logconsole.enabled) console.error(formattedMessage);
-        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${formattedMessage}\n`);
+        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
         process.exit(1);
     };
 
     debug(message: string, process: string):void {
-        const formattedMessage = this.formatMessage(message, 'debug', process);
+        const [formattedMessage, black_and_white] = this.formatMessage(message, 'debug', process);
         this.refreshDates();
 
         if(this.options.logconsole.enabled) console.debug(formattedMessage);
-        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${formattedMessage}\n`);
+        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
     warn(message: string, process: string):void {
-        const formattedMessage = this.formatMessage(message, 'warn', process);
+        const [formattedMessage, black_and_white] = this.formatMessage(message, 'warn', process);
         this.refreshDates();
 
         if(this.options.logconsole.enabled) console.warn(formattedMessage);
-        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${formattedMessage}\n`);
+        if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 };

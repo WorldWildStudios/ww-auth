@@ -48,8 +48,8 @@ export default class Users {
     avatarUUID: string;
 
     @CreateDateColumn({
-        type: 'timestamp',
-        default: () => "CURRENT_TIMESTAMP(6)"
+        type: 'datetime',
+        default: () => "CURRENT_TIMESTAMP"
     })
     createdAt: Date;
 }

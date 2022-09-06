@@ -8,10 +8,18 @@
     <h1>
        Register
     </h1>
-    <form action="POST">
+    <form method="POST">
         <div class="field">
             <label for="username">Username</label>
             <input type="text" name="username" id="username" placeholder="Username">
+        </div>
+        <div class="field">
+            <label for="firstName">First name</label>
+            <input type="text" name="firstName" id="firstName" placeholder="First Name">
+        </div>
+        <div class="field">
+            <label for="lastName">Last name</label>
+            <input type="text" name="lastName" id="lastName" placeholder="Last Name">
         </div>
         <div class="field">
             <label for="email">Email</label>
@@ -26,8 +34,8 @@
             <input type="password" name="password" id="password" placeholder="Password">
         </div>
         <div class="field">
-            <label for="password_confirmation">Password Confirmation</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation">
+            <label for="passwordConfirmation">Password Confirmation</label>
+            <input type="password" name="passwordConfirmation" id="passwordConfirmation" placeholder="Password Confirmation">
         </div>
         <input type="submit" value="Register">
     </form>
