@@ -142,8 +142,8 @@ export default class Logger {
         if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
-    public fatal(message: string, optionnalprocess: string):void {
-        const [formattedMessage, black_and_white] = this.formatMessage(message, 'fatal', optionnalprocess);
+    public fatal(message: string, optionalprocess: string):void {
+        const [formattedMessage, black_and_white] = this.formatMessage(message, 'fatal', optionalprocess);
         this.refreshDates();
 
         if(this.options.logconsole.enabled) console.error(formattedMessage);
