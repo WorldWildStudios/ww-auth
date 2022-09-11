@@ -126,7 +126,7 @@ export default class Logger {
         this.formattedDate = moment(date).tz(this.options.timezone).format(`DD/MM/YYYY HH:mm:ss${this.options.tzformat === 12 ? ' A' : ''}`);
     };
 
-    info(message: string, process: string): void {
+    public info(message: string, process: string): void {
         const [formattedMessage, black_and_white] = this.formatMessage(message, 'info', process);
         this.refreshDates();
 
@@ -134,7 +134,7 @@ export default class Logger {
         if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
-    error(message: string, process: string): void {
+    public error(message: string, process: string): void {
         const [formattedMessage, black_and_white] = this.formatMessage(message, 'error', process);
         this.refreshDates();
 
@@ -142,7 +142,7 @@ export default class Logger {
         if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
-    fatal(message: string, optionnalprocess: string):void {
+    public fatal(message: string, optionnalprocess: string):void {
         const [formattedMessage, black_and_white] = this.formatMessage(message, 'fatal', optionnalprocess);
         this.refreshDates();
 
@@ -151,7 +151,7 @@ export default class Logger {
         process.exit(1);
     };
 
-    debug(message: string, process: string):void {
+    public debug(message: string, process: string):void {
         const [formattedMessage, black_and_white] = this.formatMessage(message, 'debug', process);
         this.refreshDates();
 
@@ -159,7 +159,7 @@ export default class Logger {
         if(this.options.logsaving.enabled) fs.appendFileSync(`${this.options.logsaving.path}/${this.sessiondate}.log`, `${black_and_white}\n`);
     };
 
-    warn(message: string, process: string):void {
+    public warn(message: string, process: string):void {
         const [formattedMessage, black_and_white] = this.formatMessage(message, 'warn', process);
         this.refreshDates();
 
