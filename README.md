@@ -9,5 +9,14 @@
 - [x] Secure
 - [x] Make your own application compatible with WW-Auth
 
+## Progression
+- [x] Database
+- [x] Register
+- [x] API
+- [ ] App creation
+- [ ] Compatibility
+- [ ] Account management
+- [ ] Login
+
 ## Contact
 - Contact us on [Discord](https://discord.gg/Vh4bnWP5tc) or by [email](mailto:contact@worldwild.studio)
