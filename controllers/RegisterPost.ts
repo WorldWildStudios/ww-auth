@@ -6,7 +6,6 @@ import hash from "../structures/Hash.js";
 
 export default async function(req: Request, res: Response) {
     const { username, password, email, phone, firstName, lastName, passwordConfirmation } = req.body;
-    console.log(req.body);
     if (!username || !password || !email || !phone || !firstName || !lastName || !passwordConfirmation) {
         res.status(400).json({
             error: 'Missing fields'
@@ -22,7 +21,7 @@ export default async function(req: Request, res: Response) {
     }
     if (password !== passwordConfirmation) {
         res.status(400).json({
-            error: 'Passwords do not match'
+            error: 'Passwords does not match'
         });
         return;
     }
@@ -84,6 +83,7 @@ export default async function(req: Request, res: Response) {
         res.status(400).json({
             error: 'Username already exists'
         });
+        return;
     }
     const hashPassword = hash(password);
     const newUser = new Users();
@@ -98,4 +98,4 @@ export default async function(req: Request, res: Response) {
     res.status(200).json({
         success: true
     });
-}
+};

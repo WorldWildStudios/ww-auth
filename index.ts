@@ -11,7 +11,6 @@ import registerPost from './controllers/RegisterPost.js';
 import routeLogger from './controllers/routeLogger.js';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-
 const logger = new Logger({
     name: 'WW-Auth',
     timezone: 'Europe/Paris',
@@ -27,10 +26,6 @@ const logger = new Logger({
     }
 });
 
-
-
-
-
 DB.initialize().then(() => {
         logger.info('connected', 'DB');
 }).catch((error) => logger.fatal(error.stack + "\n\n*** This error is fatal, a Database is needed for the website to run.", 'DB'));
@@ -39,9 +34,16 @@ DB.initialize().then(() => {
 const port = config.port || 80;
 
 const app = express();
-
+app.set('trust proxy', 1);
+app.use(session({
+    secret: config.secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(express.json());
+app.use(urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -49,7 +51,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.listen(port, () => {
     logger.info('listening on port 80', 'Express');
 });
-app.use((req, res, next) => routeLogger(logger, req, res, next));
+
+app.use(routeLogger(logger));
 
 
 app.post('/register', registerPost);
@@ -101,15 +104,8 @@ class Err extends Error {
     };
 }
 
-app.set('trust proxy', 1);
-app.use(session({
-    secret: config.secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-}));
 
-app.use(urlencoded({ extended: true }));
+
 
 app.use((req, res, next) => {
   const error = new Err("Not found");

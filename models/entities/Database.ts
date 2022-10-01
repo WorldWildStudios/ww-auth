@@ -22,4 +22,4 @@ const users = DB.getRepository(Users);
 export {
     DB,
     users
-}
+};
