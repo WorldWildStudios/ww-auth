@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../parts/headers.ejs') %>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login to your WorldWild Account</h1>
+    <form class="form" method="POST">
+        <div class="field">
+            <label class="label" for="user">Email, Username or Phone</label>
+            <input class="form-input-text" type="text" name="user" id="user" placeholder="Email, Username or Phone">
+        </div>
+        <div class="field">
+            <label class="label" for="password">Password</label>
+            <input class="form-input-text" type="password" name="password" id="password" placeholder="Your cool password">
+            <div class="btn-field grid-30-70">
+                <button type="button" class="btn-transparent btn-primary back-btn btn-icon"><i class="bi bi-chevron-left"></i> Back</button>
+                <button type="submit" class="btn btn-success btn-icon"><i class="bi bi-person-plus-fill"></i> Login</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

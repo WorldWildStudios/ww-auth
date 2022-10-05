@@ -1,16 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Montserrat:wght@300&family=Source+Code+Pro:wght@300&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
 
 :root {
-    --primary: rgb(65, 65, 184);
-    --primary-light: rgb(110, 110, 228);
-    --primary-transparent: rgba(65, 65, 184, 0.65);
-    /*--secondary: ;
-    --light: #fff;
-    --dark: ;
-    --info: ;
-    --danger: ;
-    --warning: ;
-    --debug: ;*/
+    --primary: #ea5459;
+    --primary-light: #EE734B;
+    --primary-transparent: rgba(234, 84, 89, 0.65);
+    --secondary: #F7BA2C;
+    --secondary-light: #f7c82c;
+    --secondary-transparent: rgba(247, 186, 44, 0.68);
+    --success: #4A7C59;
+    --success-light: #5e9b6d;
+    --success-transparent: rgba(74, 124, 89, 0.59);
+    --warning: #ffd500;
+    --warning-light: #ccb869;
+    --warning-transparent: rgba(255, 213, 0, 0.63);
+    --danger: #d50c0c;
+    --danger-light: #b25050;
+    --danger-transparent: rgba(213, 12, 12, 0.62);
+    --info: #68B0AB;
+    --info-light: #72c4bf;
+    --info-transparent: rgba(104, 176, 171, 0.6);
 }
 
 body {
@@ -19,94 +28,152 @@ body {
 }
 
 * {
-    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
-    font-display: 'Courier New';
+    font-family: 'Montserrat', sans-serif;
 }
 
-.btn { 
+h1 {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 2.3rem;
+}
+
+h2 {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 2.1rem;
+}
+h3 {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1.9rem;
+}
+h4 {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1.7rem;
+}
+
+span.row {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+}
+span.row > .btn, span.row > .btn-transparent {
+    width: fit-content!important;
+}
+
+p.big {
+    font-size: 1.5rem;
+}
+
+
+/* Buttons */
+.btn {
+    --btn-color: #ffffff;
+    --btn-bg: transparent;
+    --btn-outline: transparent;
+    --btn-hover: #fff;
+    --btn-color-active: #fff;
+    --btn-border-bg: transparent;
+
+    font-family: 'Inter', sans-serif;
     text-decoration: none;
-    color: white;
-    padding: 10px 10px;
-    border: none;
+    color: var(--btn-color);
+    padding: 10px 15px;
+    outline: none;
+    border: 1px solid var(--btn-border-bg);
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.5s;
-    box-shadow: 0px 2px 5px 0px black;
+    background-color: var(--btn-bg);
+    transition: background-color 0.3s, box-shadow 0.2s, color 0.3s;
+    box-shadow: none;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1.5;
+    margin: 5px;
 }
+
+.btn-transparent {
+    --btn-outline: transparent;
+    --btn-hover: #fff;
+    --btn-color-active: #fff;
+
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    padding: 10px 15px;
+    outline: none;
+    border: 1px solid var(--btn-bg);
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--btn-bg);
+    transition: background-color 0.3s, box-shadow 0.2s, color 0.3s;
+    box-shadow: none;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1.5;
+    margin: 5px;
+}
+
+.btn-transparent:hover {
+    background-color: var(--btn-bg);
+    color: var(--btn-color-active);
+}
+.btn-transparent:active, .btn-transparent:focus {
+    box-shadow: 0 0 0 5px var(--btn-outline);
+}
+
+.btn:hover {
+    background-color: var(--btn-hover);
+    color: var(--btn-color-active);
+}
+.btn:active, .btn:focus {
+    box-shadow: 0 0 0 5px var(--btn-outline);
+}
+
+/* Buttons Styles */
 
 .btn-primary {
-    background-color: var(--primary);
+    --btn-bg: var(--primary);
+    --btn-hover: var(--primary-light);
+    --btn-outline: var(--primary-transparent);
+    --btn-hover-bg: var(--primary);
+    --btn-color: #ffffff;
+}
+.btn-secondary {
+    --btn-bg: var(--secondary);
+    --btn-hover: var(--secondary-light);
+    --btn-outline: var(--secondary-transparent);
+    --btn-hover-bg: var(--secondary);
+    --btn-color: white;
+}
+.btn-info {
+    --btn-bg: var(--info);
+    --btn-hover: var(--info-light);
+    --btn-outline: var(--info-transparent);
+    --btn-hover-bg: var(--info);
+    --btn-color: white;
+}
+.btn-warning {
+    --btn-bg: var(--warning);
+    --btn-hover: var(--warning-light);
+    --btn-outline: var(--warning-transparent);
+    --btn-hover-bg: var(--warning);
+    --btn-color: white;
+}
+.btn-danger {
+    --btn-bg: var(--danger);
+    --btn-hover: var(--danger-light);
+    --btn-outline: var(--danger-transparent);
+    --btn-hover-bg: var(--danger);
+    --btn-color: white;
+}
+.btn-success {
+    --btn-bg: var(--success);
+    --btn-hover: var(--success-light);
+    --btn-outline: var(--success-transparent);
+    --btn-hover-bg: var(--success);
+    --btn-color: white;
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-light)
-}
-
-.btn-primary:active {
-    box-shadow: 0px 2px 1px 0px black;
-}
-/*.btn-brightness:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background-image: rgba(255, 255, 255, 0.472);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    opacity: 0;
-    transition: opacity 400ms;
-}
-
-
-.btn-brightness:active:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background-image: rgba(255, 255, 255, 0.472);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    opacity: 1;
-    transition: opacity 400ms;
-}*/
-
-/* ripple */
-/*.ripple {
-    position: relative;
-    overflow: hidden;
-    transform: translate3d(0, 0, 0);
-}
-  
-.ripple:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    transform: scale(10, 10);
-    opacity: 0;
-    transition: transform .5s, opacity 1s;
-}
-  
-.ripple:active:after {
-    transform: scale(0, 0);
-    opacity: .3;
-    transition: 0s;
-}*/
 
 .form {
     display: flex;
@@ -115,11 +182,29 @@ body {
     justify-content: center;
     margin: 0 auto;
     width: 100%;
+    max-width: 90vw;
     gap: 18px;
+    margin-top: 50px;
+
 }
 
+i {
+    font-size: 1.2rem;
+}
+
+.btn-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 .btn-field {
+    margin-top: 20px;
     width: 100%;
+}
+
+.btn-field .btn, .btn-field .btn-transparent {
+    margin: 0;
 }
 
 .field {
@@ -128,30 +213,33 @@ body {
     align-items: center;
     justify-content: center;
     width: fit-content;
+    min-width: 500px;
+    max-width: 90vw;
     gap: 3px;
     max-width: fit-content;
 }
-.grid {
+.grid-30-70 {
     display: grid;
-    grid-template-rows: repeat(12, 1fr);
-}
-.grid-1-3 {
-    grid-column-start: span 4;
+    grid-template-columns: 30% calc(70% - 10px);
+    column-gap: 10px;
 }
 
 .field > label {
-    max-width: fit-content;
+    width: fit-content;
     align-self: flex-start;
     grid-template-columns: repeat(3, 1fr);
     font-weight: bold;
+    max-width: 90vw;
+
 }
 
 .form-input-text {
-    width: 300px;
+    width: 500px;
+    max-width: 90vw;
     height: 20px;
     padding: 12px 20px;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid var(--primary-light);
     border-radius: 4px;
     background-color: white;
     box-sizing: border-box;
@@ -159,6 +247,101 @@ body {
     box-shadow: none;
     transition: box-shadow 0.25s;
 }
+
 .form-input-text:active, .form-input-text:focus {
     box-shadow: 0 0 0 4px var(--primary-transparent);
+}
+
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(0deg) translateX(0);
+        color: black;
+    }
+    10% {
+        transform: rotate(0.5deg) translateX(-0.5px);
+    }
+    20% {
+        transform: rotate(-0.5deg) translateX(1px);
+    }
+    30% {
+        transform: rotate(0.5deg) translateX(-1px);
+    }
+    40% {
+        transform: rotate(-0.5deg) translateX(1px);
+    }
+    50% {
+        transform: rotate(0.5deg) translateX(-1px);
+    }
+    60% {
+        transform: rotate(-0.5deg) translateX(1px);
+    }
+    70% {
+        transform: rotate(0.5deg) translateX(-1px);
+    }
+    80% {
+        transform: rotate(-0.5deg) translateX(1px);
+    }
+    90% {
+        transform: rotate(0.5deg) translateX(-1px);
+        color: var(--primary);
+    }
+    100% {
+        transform: rotate(-0.5deg) translateX(0.5px);
+        color: black;
+    }
+}
+/* Make a linear gradient from top left to bottom right changing from primary color to secondary */
+@keyframes notfoundbg {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.notfound-background {
+    /* Graient, cover and no repeat */
+background: linear-gradient(45deg, var(--primary), var(--secondary)) center center / cover no-repeat;
+    background-size: 400% 400%;
+    animation: notfoundbg 15s ease infinite;
+}
+
+.big-title {
+    font-size: 8rem;
+    font-weight: bold;
+    transition: color 0.5s;
+}
+.big-title:hover {
+    color: var(--primary);
+}
+.subtitle {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-top: -120px;
+    transition: color 0.5s;
+}
+.subtitle:hover {
+    color: var(--secondary);
+}
+
+.notfound-description {
+    font-size: 1.5rem;
+    margin-top: -20px;
+    animation: none;
+    transition: animation 0.2s;
+}
+.notfound-description:hover {
+    animation: shake 0.5s infinite;
 }

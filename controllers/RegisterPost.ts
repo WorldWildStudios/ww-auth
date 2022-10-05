@@ -6,6 +6,10 @@ import hash from "../structures/Hash.js";
 
 export default async function(req: Request, res: Response) {
     const { username, password, email, phone, firstName, lastName, passwordConfirmation } = req.body;
+    if(username.toLowerCase() == "never gonna give you up") {
+        res.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        return;
+    }
     if (!username || !password || !email || !phone || !firstName || !lastName || !passwordConfirmation) {
         res.status(400).json({
             error: 'Missing fields'
@@ -74,16 +78,21 @@ export default async function(req: Request, res: Response) {
         });
         return;
     }
-    const user = await users.findOne({
-        where: {
-            username
-        }
-    });
-    if (user) {
-        res.status(400).json({
-            error: 'Username already exists'
+    const queries = [{value: {username}, type: 'Username'}, {value: {phone}, type: "Phone"}, {value: {email}, type: "Email"}];
+    for(const query of queries) {
+        let queryied = await users.findOne({
+            select: {
+                id: true
+            },
+            where: query.value
         });
-        return;
+        if(queryied) {
+
+            res.status(400).json({
+                error: `${query.type} already exists.`
+            });
+            return;
+        }
     }
     const hashPassword = hash(password);
     const newUser = new Users();

@@ -8,12 +8,12 @@
     <h1>
         WorldWild-Auth
     </h1>
-    <h3>Worldwild Studios introduce WorldWild-Auth: A unique website to login into all WorldWild applications and even more.</h3>
-    <a href="/register" class="btn btn-primary ripple">Create your WorldWildID</a>
-    <a href="/docs" class="btn btn-primary ripple">WorldWild-Auth for developpers</a>
-    <% for (let user of users) { %>
-        <h1><%= user.username %></h1>
-    <% } %>
-    <!-- Placeholder href -->
+    <p class="big">Worldwild Studios introduce WorldWild-Auth: A unique website to login into all WorldWild applications and even more.</p>
+
+    <span class="row">
+        <a href="/register" class="btn btn-primary btn-icon"><i class="bi bi-pencil-square"></i> Create your WorldWildID</a>
+        <a href="/docs" class="btn btn-primary btn-icon"><i class="bi bi-code-square"></i> WorldWild-Auth for developpers</a>
+    </span>
+    <h2><%- users.length %> users registered.</h2>
 </body>
 </html>
