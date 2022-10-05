@@ -314,7 +314,7 @@ i {
 .notfound-background {
     /* Graient, cover and no repeat */
 background: linear-gradient(45deg, var(--primary), var(--secondary)) center center / cover no-repeat;
-    background-size: 400% 400%;
+    background-size: 120% 120%;
     animation: notfoundbg 15s ease infinite;
 }
 
