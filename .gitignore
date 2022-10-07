@@ -12,9 +12,9 @@ config.ts
 !./*.d.ts
 !/*.d.ts
 
-!./routes/*
-!routes/*
-!/routes/*
+!./routes/*.ts
+!routes/*.ts
+!/routes/*.ts
 
 !./static/*
 !static/*

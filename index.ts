@@ -64,14 +64,9 @@ const files = fs.readdirSync(path.join(__dirname, 'routes')).filter(file => file
 async function main() {
     for (const file of files) {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
-        console.log(route)
         if (route.path && route.router) {
-            app.get('/test', async (req, res) => {
-                res.send('isisi');
-            });
             switch(route.method.toLowerCase()) {
                 case 'get':
-                    console.log(route.router(logger)(DB));
                     app.get(route.path, route.router(logger)());
                     break;
                 case 'post':
