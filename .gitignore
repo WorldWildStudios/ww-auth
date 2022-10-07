@@ -7,3 +7,15 @@ config.ts
 
 *.js
 ./*.js
+
+!*.d.ts
+!./*.d.ts
+!/*.d.ts
+
+!./routes/*
+!routes/*
+!/routes/*
+
+!./static/*
+!static/*
+!/static/*

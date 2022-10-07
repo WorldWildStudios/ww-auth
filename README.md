@@ -16,7 +16,9 @@
 - [ ] App creation
 - [ ] Compatibility
 - [ ] Account management
-- [ ] Login
+- [x] Login
+- [x] Design
+- [ ] Documentation
 
 ## Contact
 - Contact us on [Discord](https://discord.gg/Vh4bnWP5tc) or by [email](mailto:contact@worldwild.studio)
