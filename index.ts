@@ -84,6 +84,7 @@ async function main() {
                 default:
                     throw new Error(`Invalid method '${route.method}' in file '${file}'`);
             }
+            logger.info(`Loaded route '${route.path}' with method ${route.method}`, 'Express');
         }
     }
 }

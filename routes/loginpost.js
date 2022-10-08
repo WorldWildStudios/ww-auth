@@ -24,18 +24,18 @@ export default {
                     if (queryied) {
                         if (queryied.password == hash(password)) {
                             res.status(200).json({
-                                error: 'Successfuly connected'
+                                message: 'Successfully connected'
                             });
                             return;
                         }
                         res.status(501).json({
-                            error: 'Wrong password'
+                            message: 'Wrong password'
                         });
                         return;
                     }
                 }
                 res.status(404).json({
-                    error: 'User not found'
+                    message: 'User not found'
                 });
                 return;
             };

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../parts/headers.ejs'); %>
+    <title>Register your application</title>
+</head>
+<body>
+<h1>
+    Register your application
+</h1>
+<form class="form" method="POST">
+    <div class="field">
+        <label class="label" for="name">Name</label>
+        <input class="form-input-text" type="text" name="name" id="name" placeholder="A cool name (WorldWild Studios for example)">
+    </div>
+    <div class="field">
+        <label class="label" for="redirect">Redirect URL</label>
+        <input class="form-input-text" type="text" name="redirect" id="redirect" placeholder="https://myapp.com/">
+    </div>
+    <div class="field">
+        <label class="label" for="postReceive">Post Request Receive URL</label>
+        <input class="form-input-text" type="text" name="postReceive" id="postReceive" placeholder="https://myapp.con/auth">
+        <div class="btn-field grid-30-70">
+            <button type="button" class="btn-transparent btn-primary back-btn btn-icon"><i class="bi bi-chevron-left"></i> Back</button>
+            <button type="submit" class="btn btn-success btn-icon"><i class="bi bi-person-plus-fill"></i> Register</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

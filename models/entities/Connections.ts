@@ -1,15 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 
 @Entity()
-export default class Applications {
+export default class Connections {
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column({
-        type: 'varchar',
-        length: 25
-    })
-    name: number;
 
     @Column({
         type: 'int'
@@ -17,20 +11,29 @@ export default class Applications {
     userId: number;
 
     @Column({
-        type: 'varchar',
-        length: 255
+        type: 'int'
     })
-    redirect: string;
+    applicationId: number;
+
+    @Column({
+        type: 'int'
+    })
+    scope: number;
 
     @Column({
         type: 'varchar',
-        length: 255
+        length: 45
     })
-    postReceive: string;
+    ip: string;
 
     @CreateDateColumn({
         type: 'datetime',
         default: () => "CURRENT_TIMESTAMP"
     })
     createdAt: Date;
+
+    @CreateDateColumn({
+        type: 'datetime'
+    })
+    expiresAt: Date;
 }
