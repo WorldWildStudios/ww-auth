@@ -8,6 +8,11 @@
     <h1>
        Register
     </h1>
+        <% if(messagesDanger) { %>
+            <% for(let message of messagesDanger) { %>
+                <%- message %>
+            <% } %>
+        <% } %>
     <form class="form" method="POST">
         <div class="field">
             <label class="label" for="username">Username</label>

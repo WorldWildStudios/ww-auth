@@ -2,18 +2,16 @@ import express, { urlencoded } from 'express';
 import path from 'path';
 import config from './config.js';
 import 'reflect-metadata';
-import hash from './structures/Hash.js';
 import Logger from './structures/Logger.js';
 import session from 'express-session';
-import {DB, users} from './models/entities/Database.js';
+import {DB} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
 import routeLogger from './controllers/routeLogger.js';
-import flash from 'express-flash';
+import flash from 'connect-flash';
+import cookierParser from 'cookie-parser';
 import fs from "fs";
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-import { createRequire } from "node:module";
-const require = createRequire(import.meta.url);
 
 const logger = new Logger({
     name: 'WW-Auth',
@@ -39,6 +37,7 @@ const port = config.port || 80;
 
 const app = express();
 app.set('trust proxy', 1);
+app.use(cookierParser(config.secret));
 app.use(session({
     secret: config.secret,
     resave: false,
@@ -108,7 +107,7 @@ main().then(() => {
         next(error);
     });
 
-    app.use((error: Err, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    app.use((error: Err, req: express.Request, res: express.Response) => {
         if(error.status === 404) {
             res.status(404).render("404");
         } else {

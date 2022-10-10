@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { randomUUID } from 'crypto';
-import { DB, users } from '../models/entities/Database.js';
+import { users } from '../models/entities/Database.js';
 import Users from "../models/entities/Users.js";
 import hash from "../structures/Hash.js";
 
@@ -11,71 +11,61 @@ export default async function(req: Request, res: Response) {
         return;
     }
     if (!username || !password || !email || !phone || !firstName || !lastName || !passwordConfirmation) {
-        res.status(400).json({
-            error: 'Missing fields'
-        });
+        req.flash("danger", 'Missing fields');
+        res.redirect('/register');
         return;
     }
     // Password must be between 8 and 64 characters and be the same as the confirmation
     if (password.length < 8 || password.length > 64) {
-        res.status(400).json({
-            error: 'Password must be between 8 and 64 characters'
-        });
+        req.flash("danger", 'Password must be between 8 and 64 characters');
+        res.redirect('/register');
         return;
     }
     if (password !== passwordConfirmation) {
-        res.status(400).json({
-            error: 'Passwords does not match'
-        });
+        req.flash("danger", 'Passwords does not match');
+        res.redirect('/register');
         return;
     }
     // Username must be between 3 and 25 characters
     if (username.length < 3 || username.length > 25) {
-        res.status(400).json({
-            error: 'Username must be between 3 and 25 characters'
-        });
+        req.flash("danger", 'Username must be between 3 and 25 characters');
+        res.redirect('/register');
         return;
     }
     // Email must be between 3 and 255 characters
     if (email.length < 3 || email.length > 255) {
-        res.status(400).json({
-            error: 'Email must be between 3 and 255 characters'
-        });
+        req.flash("danger", 'Email must be between 3 and 255 characters');
+        res.redirect('/register');
         return;
     }
     // And be a correct email
     if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-        res.status(400).json({
-            error: 'Email is not valid'
-        });
+        req.flash("danger", 'Email is not valid');
+        res.redirect('/register');
         return;
     }
     // Phone must be between 3 and 255 characters
     if (phone.length < 3 || phone.length > 255) {
-        res.status(400).json({
-            error: 'Phone must be between 3 and 255 characters'
-        });
+        req.flash("danger", 'Phone must be between 3 and 255 characters');
+        res.redirect('/register');
         return;
     }
     // And be a correct phone number
     if (!phone.match(/^[0-9]{10}$/)) {
-        res.status(400).json({
-            error: 'Phone is not valid'
-        });
+        req.flash("danger", 'Phone is not valid');
+        res.redirect('/register');
         return;
     }
     // First name must be between 3 and 25 characters
     if (firstName.length < 3 || firstName.length > 25) {
-        res.status(400).json({
-            error: 'First name must be between 3 and 25 characters'
-        });
+        req.flash("danger", 'First name must be between 3 and 25 characters');
+        res.redirect('/register');
         return;
     }
     // Last name must be between 3 and 25 characters
     if (lastName.length < 3 || lastName.length > 25) {
-        res.status(400).json({
-            error: 'Last name must be between 3 and 25 characters'
-        });
+        req.flash("danger", 'Last name must be between 3 and 25 characters');
+        res.redirect('/register');
         return;
     }
     const queries = [{value: {username}, type: 'Username'}, {value: {phone}, type: "Phone"}, {value: {email}, type: "Email"}];
@@ -87,10 +77,8 @@ export default async function(req: Request, res: Response) {
             where: query.value
         });
         if(queryied) {
-
-            res.status(400).json({
-                error: `${query.type} already exists.`
-            });
+            req.flash("danger", `${query.type} already exists.`);
+            res.redirect('/register');
             return;
         }
     }
@@ -104,7 +92,7 @@ export default async function(req: Request, res: Response) {
     newUser.lastName = lastName;
     newUser.avatarUUID = randomUUID();
     await users.save(newUser);
-    res.status(200).json({
-        success: true
-    });
+    req.flash("success", 'You have successfuly created your account !');
+    res.redirect('/register');
+    return;
 };

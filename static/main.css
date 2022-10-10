@@ -214,7 +214,6 @@ i {
     justify-content: center;
     width: fit-content;
     min-width: 500px;
-    max-width: 90vw;
     gap: 3px;
     max-width: fit-content;
 }
@@ -239,7 +238,7 @@ i {
     height: 20px;
     padding: 12px 20px;
     display: inline-block;
-    border: 1px solid var(--primary-light);
+    border: 1px solid rgba(0, 0, 0, 0.18);
     border-radius: 4px;
     background-color: white;
     box-sizing: border-box;
@@ -301,13 +300,13 @@ i {
 /* Make a linear gradient from top left to bottom right changing from primary color to secondary */
 @keyframes notfoundbg {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
     50% {
         background-position: 100% 50%;
     }
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 }
 
