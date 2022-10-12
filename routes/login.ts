@@ -1,5 +1,6 @@
 import {DB, users} from '../models/entities/Database.js';
-import {Request, Response} from 'express';
+import {Response} from 'express';
+import {Request} from '../index.js';
 import Logger from '../structures/Logger.js';
 
 export default {

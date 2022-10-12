@@ -15,17 +15,24 @@ export default {
                 }
                 const queries = [{ username: user }, { phone: user }, { email: user }];
                 for (const query of queries) {
-                    let queryied = await users.findOne({
+                    let queried = await users.findOne({
                         select: {
                             password: true
                         },
                         where: query
                     });
-                    if (queryied) {
-                        if (queryied.password == hash(password)) {
-                            res.status(200).json({
-                                message: 'Successfully connected'
-                            });
+                    if (queried) {
+                        if (queried.password == hash(password)) {
+                            //req.flash('success', 'Successfully logged in');
+                            if ('redirectTo' in req.session) {
+                                res.redirect(req.session['redirectTo']);
+                                delete req.session['redirectTo'];
+                                req.session.save((err) => {
+                                    if (err) {
+                                        logger.error(err, 'Express');
+                                    }
+                                });
+                            }
                             return;
                         }
                         res.status(501).json({

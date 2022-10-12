@@ -329,7 +329,7 @@ background: linear-gradient(45deg, var(--primary), var(--secondary)) center cent
 .subtitle {
     font-size: 3rem;
     font-weight: bold;
-    margin-top: -120px;
+    margin-top: -110px;
     transition: color 0.5s;
 }
 .subtitle:hover {

@@ -1,6 +1,7 @@
 import {users} from '../models/entities/Database.js';
 import hash from '../structures/Hash.js';
-import {Request, Response} from 'express';
+import {Response} from 'express';
+import {Request} from '../index.js';
 import Logger from '../structures/Logger.js';
 
 export default {
@@ -18,17 +19,24 @@ export default {
                 }
                 const queries = [{username: user}, {phone: user}, {email: user}];
                 for(const query of queries) {
-                    let queryied = await users.findOne({
+                    let queried = await users.findOne({
                         select: {
                             password: true
                         },
                         where: query
                     });
-                    if(queryied) {
-                        if(queryied.password==hash(password)) {
-                            res.status(200).json({
-                                message: 'Successfully connected'
-                            });
+                    if(queried) {
+                        if(queried.password==hash(password)) {
+                            //req.flash('success', 'Successfully logged in');
+                            if('redirectTo' in req.session) {
+                                res.redirect(req.session['redirectTo'] as string);
+                                delete req.session['redirectTo'];
+                                req.session.save((err) => {
+                                    if(err) {
+                                        logger.error(err, 'Express');
+                                    }
+                                });
+                            }
                             return;
 
                         }

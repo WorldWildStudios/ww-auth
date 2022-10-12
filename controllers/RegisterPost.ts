@@ -11,60 +11,60 @@ export default async function(req: Request, res: Response) {
         return;
     }
     if (!username || !password || !email || !phone || !firstName || !lastName || !passwordConfirmation) {
-        req.flash("danger", 'Missing fields');
+        // req.flash("danger", 'Missing fields');
         res.redirect('/register');
         return;
     }
     // Password must be between 8 and 64 characters and be the same as the confirmation
     if (password.length < 8 || password.length > 64) {
-        req.flash("danger", 'Password must be between 8 and 64 characters');
+        //req.flash("danger", 'Password must be between 8 and 64 characters');
         res.redirect('/register');
         return;
     }
     if (password !== passwordConfirmation) {
-        req.flash("danger", 'Passwords does not match');
+        //req.flash("danger", 'Passwords does not match');
         res.redirect('/register');
         return;
     }
     // Username must be between 3 and 25 characters
     if (username.length < 3 || username.length > 25) {
-        req.flash("danger", 'Username must be between 3 and 25 characters');
+        //req.flash("danger", 'Username must be between 3 and 25 characters');
         res.redirect('/register');
         return;
     }
     // Email must be between 3 and 255 characters
     if (email.length < 3 || email.length > 255) {
-        req.flash("danger", 'Email must be between 3 and 255 characters');
+        //req.flash("danger", 'Email must be between 3 and 255 characters');
         res.redirect('/register');
         return;
     }
     // And be a correct email
     if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-        req.flash("danger", 'Email is not valid');
+        // req.flash("danger", 'Email is not valid');
         res.redirect('/register');
         return;
     }
     // Phone must be between 3 and 255 characters
     if (phone.length < 3 || phone.length > 255) {
-        req.flash("danger", 'Phone must be between 3 and 255 characters');
+        //req.flash("danger", 'Phone must be between 3 and 255 characters');
         res.redirect('/register');
         return;
     }
     // And be a correct phone number
     if (!phone.match(/^[0-9]{10}$/)) {
-        req.flash("danger", 'Phone is not valid');
+        //req.flash("danger", 'Phone is not valid');
         res.redirect('/register');
         return;
     }
     // First name must be between 3 and 25 characters
     if (firstName.length < 3 || firstName.length > 25) {
-        req.flash("danger", 'First name must be between 3 and 25 characters');
+        //req.flash("danger", 'First name must be between 3 and 25 characters');
         res.redirect('/register');
         return;
     }
     // Last name must be between 3 and 25 characters
     if (lastName.length < 3 || lastName.length > 25) {
-        req.flash("danger", 'Last name must be between 3 and 25 characters');
+        //req.flash("danger", 'Last name must be between 3 and 25 characters');
         res.redirect('/register');
         return;
     }
@@ -77,7 +77,7 @@ export default async function(req: Request, res: Response) {
             where: query.value
         });
         if(queryied) {
-            req.flash("danger", `${query.type} already exists.`);
+            //req.flash("danger", `${query.type} already exists.`);
             res.redirect('/register');
             return;
         }
@@ -92,7 +92,7 @@ export default async function(req: Request, res: Response) {
     newUser.lastName = lastName;
     newUser.avatarUUID = randomUUID();
     await users.save(newUser);
-    req.flash("info", 'You have successfuly created your account !');
+    //req.flash("info", 'You have successfuly created your account !');
     res.redirect('/register');
     return;
 };

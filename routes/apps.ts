@@ -1,4 +1,4 @@
-import {users, applications} from '../models/entities/Database.js';
+import {applications} from '../models/entities/Database.js';
 import {Request, Response} from 'express';
 import Logger from '../structures/Logger.js';
 

@@ -1,16 +1,24 @@
-import express, {NextFunction, Request, Response, urlencoded} from 'express';
+import express, {NextFunction, Response, urlencoded} from 'express';
 import path from 'path';
 import config from './config.js';
 import 'reflect-metadata';
 import Logger from './structures/Logger.js';
 import session, {Session, SessionData} from 'express-session';
-import {DB, users} from './models/entities/Database.js';
+import { TypeormStore } from "connect-typeorm";
+import {DB, users, sessionRepository} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
 import routeLogger from './controllers/routeLogger.js';
-import flash from 'express-flash';
 import cookierParser from 'cookie-parser';
 import fs from "fs";
+import * as Express from 'express';
+// @ts-ignore
+export interface Request extends Express.Request {
+    session: Session & Partial<SessionData> & {
+        userId?: number;
+        redirectTo?: string;
+    };
+}
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const logger = new Logger({
@@ -42,9 +50,13 @@ app.use(session({
     secret: config.secret,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    cookie: { secure: true },
+    store: new TypeormStore({
+        cleanupLimit: 2,
+        limitSubquery: false, // If using MariaDB.
+        ttl: 86400
+    }).connect(sessionRepository)
 }));
-app.use(flash());
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
@@ -66,18 +78,16 @@ async function main() {
         if (route.path && route.router) {
             const run = (req: Request, res: Response, next: NextFunction) => {
                 if(route.loginRequired) {
-                    type CCSession = typeof req.session;
-                    interface CSession extends CCSession {
-                        userId: number
+                    if(!req.session.userId) {
+                        req.session['redirectTo'] = req.path;
+                        return res.render('mustlogin');
+                    } else {
+                        const connectedUser = users.findOne({ where: { id: req.session['userId'] } });
+                        return route.router(logger)({connectedUser})(req, res);
                     }
-
-                    if((req.session as CSession).userId) {
-                        const queryEdUser = users.findOne({where: { id: (req.session as CSession).userId }})
-
-
-                    }
+                } else {
+                    return route.router(logger)()(req, res);
                 }
-                return route.router(logger)()(req, res);
             }
 
             switch(route.method.toLowerCase()) {
