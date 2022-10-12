@@ -8,8 +8,8 @@
     <h1>
        Register
     </h1>
-        <% if(messagesDanger) { %>
-            <% for(let message of messagesDanger) { %>
+        <% if(messages.danger) { %>
+            <% for(let message of messages.danger) { %>
                 <%- message %>
             <% } %>
         <% } %>

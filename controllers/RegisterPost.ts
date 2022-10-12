@@ -92,7 +92,7 @@ export default async function(req: Request, res: Response) {
     newUser.lastName = lastName;
     newUser.avatarUUID = randomUUID();
     await users.save(newUser);
-    req.flash("success", 'You have successfuly created your account !');
+    req.flash("info", 'You have successfuly created your account !');
     res.redirect('/register');
     return;
 };

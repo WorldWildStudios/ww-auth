@@ -244,11 +244,12 @@ i {
     box-sizing: border-box;
     outline: none;
     box-shadow: none;
-    transition: box-shadow 0.25s;
+    transition: box-shadow 0.25s, border-color 0.25s;
 }
 
 .form-input-text:active, .form-input-text:focus {
     box-shadow: 0 0 0 4px var(--primary-transparent);
+    border-color: var(--primary-transparent);
 }
 
 .container-center {

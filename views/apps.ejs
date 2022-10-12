@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('../parts/headers.ejs'); %>
+    <title>Apps</title>
+</head>
+<body>
+    <% for (const app of apps) { %>
+        <h1><%= app.name %></h1>
+    <% } %>
+</body>
+</html>

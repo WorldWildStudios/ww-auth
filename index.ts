@@ -1,14 +1,14 @@
-import express, { urlencoded } from 'express';
+import express, {NextFunction, Request, Response, urlencoded} from 'express';
 import path from 'path';
 import config from './config.js';
 import 'reflect-metadata';
 import Logger from './structures/Logger.js';
-import session from 'express-session';
-import {DB} from './models/entities/Database.js';
+import session, {Session, SessionData} from 'express-session';
+import {DB, users} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
 import routeLogger from './controllers/routeLogger.js';
-import flash from 'connect-flash';
+import flash from 'express-flash';
 import cookierParser from 'cookie-parser';
 import fs from "fs";
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -64,21 +64,37 @@ async function main() {
     for (const file of files) {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
         if (route.path && route.router) {
+            const run = (req: Request, res: Response, next: NextFunction) => {
+                if(route.loginRequired) {
+                    type CCSession = typeof req.session;
+                    interface CSession extends CCSession {
+                        userId: number
+                    }
+
+                    if((req.session as CSession).userId) {
+                        const queryEdUser = users.findOne({where: { id: (req.session as CSession).userId }})
+
+
+                    }
+                }
+                return route.router(logger)()(req, res);
+            }
+
             switch(route.method.toLowerCase()) {
                 case 'get':
-                    app.get(route.path, route.router(logger)());
+                    app.get(route.path, run);
                     break;
                 case 'post':
-                    app.post(route.path, route.router(logger)());
+                    app.post(route.path, run);
                     break;
                 case 'put':
-                    app.put(route.path, route.router(logger)());
+                    app.put(route.path, run);
                     break;
                 case 'delete':
-                    app.delete(route.path, route.router(logger)());
+                    app.delete(route.path, run);
                     break;
                 case 'patch':
-                    app.patch(route.path, route.router(logger)());
+                    app.patch(route.path, run);
                     break;
                 default:
                     throw new Error(`Invalid method '${route.method}' in file '${file}'`);

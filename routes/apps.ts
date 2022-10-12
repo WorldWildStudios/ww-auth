@@ -1,18 +1,18 @@
-import {DB, users} from '../models/entities/Database.js';
+import {users, applications} from '../models/entities/Database.js';
 import {Request, Response} from 'express';
 import Logger from '../structures/Logger.js';
 
 export default {
-    path: '/',
+    path: '/apps',
+    loginRequired: true,
     method: 'GET',
     router: (logger: Logger) => {
         return (data={}) => {
-
             return async (req: Request, res: Response) => {
-                const usersR = await users.find();
+                const apps = await applications.find();
 
-                res.render('index', {
-                    users: usersR
+                res.render('apps', {
+                    apps: apps
                 });
             };
         };
