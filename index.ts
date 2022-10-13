@@ -78,6 +78,7 @@ async function main() {
             let run;
             if(route.loginRequired) {
                 run = (req: Request, res: Response, next: NextFunction) => {
+                    logger.debug(JSON.stringify(req.session), "DEVDEBUG")
                     if (!req.session.userId) {
                         req.session['redirectTo'] = req.path;
                         return res.render('mustlogin');

@@ -21,29 +21,30 @@ export default {
                 for(const query of queries) {
                     let queried = await users.findOne({
                         select: {
+                            id: true,
                             password: true
                         },
                         where: query
                     });
                     if(queried) {
                         if(queried.password==hash(password)) {
-                            //req.flash('success', 'Successfully logged in');
-                            logger.debug(JSON.stringify(req.session), 'DEVDEBUG');
+                            req.session['userId'] = queried.id;
+                            let redirect_url: string;
                             if(!req.session.redirectTo) {
-                                res.redirect('/');
+                               redirect_url = '/';
                             } else {
-                                const redirect = req.session.redirectTo as string;
+                                redirect_url = req.session.redirectTo as string;
                                 delete req.session.redirectTo;
-                                req.session.userId = queried.id;
-                                req.session.save((err) => {
-                                    if(err) {
-                                        logger.error(err, 'Express');
-                                    }
-                                });
-                                res.redirect(redirect);
                             }
-                            return;
 
+                            req.session.save((err) => {
+                                if(err) {
+                                    logger.error(err, 'Express-Sessions');
+                                } else {
+                                    res.redirect(redirect_url);
+                                }
+                            });
+                            return;
                         }
                         res.status(501).json({
                             message: 'Wrong password'
