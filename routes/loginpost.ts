@@ -8,7 +8,7 @@ export default {
     path: '/login',
     method: 'POST',
     router: (logger: Logger) => {
-        return (data={}) => {
+        return () => {
             return async (req: Request, res: Response) => {
                 const {user, password } = req.body;
                 if(!user || !password) {
@@ -28,14 +28,19 @@ export default {
                     if(queried) {
                         if(queried.password==hash(password)) {
                             //req.flash('success', 'Successfully logged in');
-                            if('redirectTo' in req.session) {
-                                res.redirect(req.session['redirectTo'] as string);
-                                delete req.session['redirectTo'];
+                            logger.debug(JSON.stringify(req.session), 'DEVDEBUG');
+                            if(!req.session.redirectTo) {
+                                res.redirect('/');
+                            } else {
+                                const redirect = req.session.redirectTo as string;
+                                delete req.session.redirectTo;
+                                req.session.userId = queried.id;
                                 req.session.save((err) => {
                                     if(err) {
                                         logger.error(err, 'Express');
                                     }
                                 });
+                                res.redirect(redirect);
                             }
                             return;
 

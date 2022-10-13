@@ -48,9 +48,8 @@ app.set('trust proxy', 1);
 app.use(cookierParser(config.secret));
 app.use(session({
     secret: config.secret,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
-    cookie: { secure: true },
     store: new TypeormStore({
         cleanupLimit: 2,
         limitSubquery: false, // If using MariaDB.
@@ -76,18 +75,19 @@ async function main() {
     for (const file of files) {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
         if (route.path && route.router) {
-            const run = (req: Request, res: Response, next: NextFunction) => {
-                if(route.loginRequired) {
-                    if(!req.session.userId) {
+            let run;
+            if(route.loginRequired) {
+                run = (req: Request, res: Response, next: NextFunction) => {
+                    if (!req.session.userId) {
                         req.session['redirectTo'] = req.path;
                         return res.render('mustlogin');
                     } else {
-                        const connectedUser = users.findOne({ where: { id: req.session['userId'] } });
-                        return route.router(logger)({connectedUser})(req, res);
+                        const connectedUser = users.findOne({where: {id: req.session['userId']}});
+                        return route.router(logger)({connectedUser})(req, res, next);
                     }
-                } else {
-                    return route.router(logger)()(req, res);
                 }
+            } else {
+                run = route.router(logger)();
             }
 
             switch(route.method.toLowerCase()) {
