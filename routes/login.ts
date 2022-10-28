@@ -6,11 +6,7 @@ import Logger from '../structures/Logger.js';
 export default {
     path: '/login',
     method: 'GET',
-    router: (logger: Logger) => {
-        return (data={}) => {
-            return async (req: Request, res: Response) => {
-                res.render('login');
-            };
-        };
+    router: async (req: Request, res: Response, logger: Logger, data={}) => {
+        res.render('login');
     }
 };

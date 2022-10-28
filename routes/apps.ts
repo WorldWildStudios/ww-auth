@@ -6,15 +6,11 @@ export default {
     path: '/apps',
     loginRequired: true,
     method: 'GET',
-    router: (logger: Logger) => {
-        return (data={}) => {
-            return async (req: Request, res: Response) => {
-                const apps = await applications.find();
+    router: async (req: Request, res: Response, logger: Logger, data={}) => {
+        const apps = await applications.find();
 
-                res.render('apps', {
-                    apps: apps
-                });
-            };
-        };
+        res.render('apps', {
+            apps: apps
+        });
     }
 };

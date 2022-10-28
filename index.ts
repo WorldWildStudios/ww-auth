@@ -9,9 +9,10 @@ import {DB, users, sessionRepository} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
 import routeLogger from './controllers/routeLogger.js';
-import cookierParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import fs from "fs";
 import * as Express from 'express';
+
 // @ts-ignore
 export interface Request extends Express.Request {
     session: Session & Partial<SessionData> & {
@@ -20,6 +21,7 @@ export interface Request extends Express.Request {
     };
 }
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 
 const logger = new Logger({
     name: 'WW-Auth',
@@ -45,7 +47,7 @@ const port = config.port || 80;
 
 const app = express();
 app.set('trust proxy', 1);
-app.use(cookierParser(config.secret));
+app.use(cookieParser(config.secret));
 app.use(session({
     secret: config.secret,
     resave: false,
@@ -70,46 +72,30 @@ app.listen(port, () => {
 
 app.use(routeLogger(logger));
 
-const files = fs.readdirSync(path.join(__dirname, 'routes')).filter(file => file.endsWith('.js'));
-
 async function main() {
+    const files = fs.readdirSync(path.join(__dirname, 'routes')).filter(file => file.endsWith('.js'));
     for (const file of files) {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
         if (route.path && route.router) {
-            const run = (req: Request, res: Response, next: NextFunction) => {
+
+            const run = (req: Request, res: Response) => {
                 if(route.loginRequired) {
                     if(!req.session.userId) {
                         req.session['redirectTo'] = req.path;
                         return res.render('mustlogin');
                     } else {
                         const connectedUser = users.findOne({ where: { id: req.session['userId'] } });
-                        return route.router(logger)({connectedUser})(req, res);
+                        return route.router(req, res, logger, {connectedUser});
                     }
                 } else {
-                    return route.router(logger)()(req, res);
+                    return route.router(req, res, logger, {});
                 }
             }
 
-            switch(route.method.toLowerCase()) {
-                case 'get':
-                    app.get(route.path, run);
-                    break;
-                case 'post':
-                    app.post(route.path, run);
-                    break;
-                case 'put':
-                    app.put(route.path, run);
-                    break;
-                case 'delete':
-                    app.delete(route.path, run);
-                    break;
-                case 'patch':
-                    app.patch(route.path, run);
-                    break;
-                default:
-                    throw new Error(`Invalid method '${route.method}' in file '${file}'`);
-            }
-            logger.info(`Loaded route '${route.path}' with method ${route.method}`, 'Express');
+
+            // @ts-ignore
+            app[route.method.toLowerCase()](route.path, run);
+            logger.info(`Loaded route '${route.path}' (${route.method.toUpperCase()})`, 'Express');
         }
     }
 }
@@ -145,6 +131,8 @@ main().then(() => {
             });
         }
     });
+}).catch((error) => {
+    logger.fatal(error.stack + "\n\n**** FATAL: The website needs to be loaded.", 'Express');
 });
 
 

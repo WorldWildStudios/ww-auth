@@ -8,7 +8,7 @@ class LoggerError extends Error {
     constructor(message: string) {
         super(message);
     };
-};
+}
 
 const colors = {
     grey: '#bbbbbb',
@@ -80,7 +80,7 @@ export default class Logger {
         if(this.options.logsaving.enabled && !fs.existsSync(this.options.logsaving.path)) {
             console.warn(`[Logger] The logs folder doesn't exist, creating it...`);
             fs.mkdirSync(this.options.logsaving.path);
-        };
+        }
     };
 
     /**
@@ -116,7 +116,7 @@ export default class Logger {
             return [`${chalk.hex(grey)('[')}${chalk.hex(blue)(this.formattedDate)}${chalk.hex(grey)(']')} ${chalk.hex(grey)('[')}${chalk.hex(loggernamecolor)(this.options.name)}${process ? chalk.hex(grey)(' / ') : ''}${process ? chalk.hex(processcolor)(process) : ''}${chalk.hex(grey)(']')} ${highlight ? chalk.bgHex(background)(chalk.hex(colorlight)(type.toUpperCase())) : chalk.hex(colorlight)(type.toUpperCase())} ${chalk.hex(grey)('▪')} ${chalk.hex(color)(message)}`, formattedMessage];
         } else {
             return [formattedMessage, formattedMessage];
-        };
+        }
     };
 
     refreshDates(): void {
