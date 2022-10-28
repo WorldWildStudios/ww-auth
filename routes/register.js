@@ -1,11 +1,7 @@
 export default {
     path: '/register',
     method: 'GET',
-    router: (logger) => {
-        return (data = {}) => {
-            return async (req, res) => {
-                res.render('register');
-            };
-        };
+    router: async (req, res, logger, data = {}) => {
+        res.render('register');
     }
 };

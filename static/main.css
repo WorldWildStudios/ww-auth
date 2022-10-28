@@ -235,7 +235,7 @@ i {
 .form-input-text {
     width: 500px;
     max-width: 90vw;
-    height: 20px;
+    height: 50px;
     padding: 12px 20px;
     display: inline-block;
     border: 1px solid rgba(0, 0, 0, 0.18);

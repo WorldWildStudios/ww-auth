@@ -72,11 +72,14 @@ app.listen(port, () => {
 
 app.use(routeLogger(logger));
 
+const isValidMethod = (method: string) => ['get', 'post', 'put', 'patch', 'delete'].includes(method.toLowerCase());
+
+
 async function main() {
     const files = fs.readdirSync(path.join(__dirname, 'routes')).filter(file => file.endsWith('.js'));
     for (const file of files) {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
-        if (route.path && route.router) {
+        if (route.path && route.router && isValidMethod(route.method)) {
 
             const run = (req: Request, res: Response) => {
                 if(route.loginRequired) {
@@ -104,7 +107,7 @@ async function main() {
 
 
 class Err extends Error {
-    public status: number = 501;
+    public status: number = 500;
 
     constructor(message: string) {
         super(message);
@@ -112,6 +115,7 @@ class Err extends Error {
 }
 main().then(() => {
     app.post('/register', registerPost);
+
 
     app.use((req, res, next) => {
         const error = new Err("Not found");
