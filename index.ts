@@ -14,12 +14,17 @@ import fs from "fs";
 import * as Express from 'express';
 
 // @ts-ignore
-export interface Request extends Express.Request {
+export interface CRequest extends Express.Request {
     session: Session & Partial<SessionData> & {
         userId?: number;
         redirectTo?: string;
     };
+    error?: Err;
 }
+export interface CResponse extends Express.Response {
+
+}
+
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 
@@ -81,10 +86,16 @@ async function main() {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
         if (route.path && route.router && isValidMethod(route.method)) {
 
-            const run = (req: Request, res: Response) => {
+            const run = (req: CRequest, res: CResponse) => {
+                console.log(req.session);
                 if(route.loginRequired) {
                     if(!req.session.userId) {
                         req.session['redirectTo'] = req.path;
+                        req.session.save((err) => {
+                            if(err) {
+                                logger.error(err, 'Express');
+                            }
+                        });
                         return res.render('mustlogin');
                     } else {
                         const connectedUser = users.findOne({ where: { id: req.session['userId'] } });
@@ -117,13 +128,18 @@ main().then(() => {
     app.post('/register', registerPost);
 
 
-    app.use((req, res, next) => {
+    app.use((req: CRequest, res: CResponse, next) => {
+        console.log("Debug 1");
         const error = new Err("Not found");
         error.status = 404;
-        next(error);
+        console.log(next);
+        req.error = error;
+        next();
     });
 
-    app.use((error: Err, req: express.Request, res: express.Response) => {
+    app.use((req: CRequest, res: CResponse) => {
+        console.log(req.error);
+        let error = (!req.error ? new Err("Internal Server Error") : req.error) as Err;
         if(error.status === 404) {
             res.status(404).render("404");
         } else {
