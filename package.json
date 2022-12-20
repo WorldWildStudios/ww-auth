@@ -12,6 +12,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@azure/storage-blob": "^12.12.0",
         "@types/connect-flash": "^0.0.37",
         "@types/cookie-parser": "^1.4.3",
         "@types/express-flash": "^0.0.2",

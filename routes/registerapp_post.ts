@@ -41,7 +41,7 @@ export default {
             });
             return;
         }
-        const newApp= new Applications();
+        const newApp = new Applications();
         newApp.name = form.name;
         newApp.redirect = form.redirect;
         newApp.postReceive = form.postReceive;

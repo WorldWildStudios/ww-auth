@@ -23,7 +23,6 @@ export default {
             if (queried) {
                 if (queried.password == hash(password)) {
                     //req.flash('success', 'Successfully logged in');
-                    console.log(queried);
                     req.session['userId'] = queried.id;
                     req.session.save(err => {
                         if (err) {
@@ -38,10 +37,8 @@ export default {
                                 logger.error(err, 'Express');
                             }
                         });
-                        console.log(req.session);
                         return;
                     }
-                    console.log(req.session);
                     res.status(200).json({
                         message: 'Success'
                     });

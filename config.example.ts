@@ -5,5 +5,10 @@ export default {
     username: "",
     password: "",
     secret: "",
-    hashSecret: ""
+    hashSecret: "",
+    azureStorageContainerName: "avatars",
+    azureStorageConnection: {
+        account: "",
+        key: ""
+    }
 };

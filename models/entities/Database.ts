@@ -19,6 +19,7 @@ const DB = new DataSource({
         "trustServerCertificate": false
     }
 });
+
 const users = DB.getRepository(Users);
 const applications = DB.getRepository(Applications);
 const connections = DB.getRepository(Connections);

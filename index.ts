@@ -12,6 +12,7 @@ import routeLogger from './controllers/routeLogger.js';
 import cookieParser from 'cookie-parser';
 import fs from "fs";
 import * as Express from 'express';
+import BlobStorage from "./structures/BlobStorage";
 
 // @ts-ignore
 export interface CRequest extends Express.Request {
@@ -42,6 +43,8 @@ const logger = new Logger({
         enabled: false,
     }
 });
+
+const avatarStorage = new BlobStorage(logger);
 
 DB.initialize().then(() => {
         logger.info('connected', 'DB');
@@ -95,7 +98,6 @@ async function main() {
         if (route.path && route.router && isValidMethod(route.method)) {
 
             const run = (req: CRequest, res: CResponse) => {
-                console.log(req.session);
                 if(route.loginRequired) {
                     if(!req.session.userId) {
                         req.session['redirectTo'] = req.path;
@@ -164,5 +166,8 @@ main().then(() => {
     logger.fatal(error.stack + "\n\n**** FATAL: The website needs to be loaded.", 'Express');
 });
 
-
-
+export {
+    app,
+    logger,
+    avatarStorage
+}

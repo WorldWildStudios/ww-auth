@@ -9,7 +9,7 @@ export default class Applications {
         type: 'varchar',
         length: 25
     })
-    name: number;
+    name: string;
 
     @Column({
         type: 'int'
@@ -33,4 +33,10 @@ export default class Applications {
         default: () => "CURRENT_TIMESTAMP"
     })
     createdAt: Date;
+
+    @Column({
+        type: 'varchar',
+        length: 36
+    })
+    avatarUUID: string;
 }
