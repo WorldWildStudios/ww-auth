@@ -5,16 +5,11 @@ import Logger from '../structures/Logger.js';
 export default {
     path: '/',
     method: 'GET',
-    router: (logger: Logger) => {
-        return (data={}) => {
+    router: async (req: Request, res: Response, logger: Logger, data={}) => {
+        const usersR = await users.find();
 
-            return async (req: Request, res: Response) => {
-                const usersR = await users.find();
-
-                res.render('index', {
-                    users: usersR
-                });
-            };
-        };
+        res.render('index', {
+            users: usersR
+        });
     }
 };

@@ -4,22 +4,30 @@ import config from './config.js';
 import 'reflect-metadata';
 import Logger from './structures/Logger.js';
 import session, {Session, SessionData} from 'express-session';
-import { TypeormStore } from "connect-typeorm";
+import {TypeormStore} from "connect-typeorm";
 import {DB, users, sessionRepository} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
 import routeLogger from './controllers/routeLogger.js';
-import cookierParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import fs from "fs";
 import * as Express from 'express';
+import BlobStorage from "./structures/BlobStorage";
+
 // @ts-ignore
-export interface Request extends Express.Request {
+export interface CRequest extends Express.Request {
     session: Session & Partial<SessionData> & {
         userId?: number;
         redirectTo?: string;
     };
+    error?: Err;
 }
+export interface CResponse extends Express.Response {
+
+}
+
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 
 const logger = new Logger({
     name: 'WW-Auth',
@@ -36,6 +44,8 @@ const logger = new Logger({
     }
 });
 
+const avatarStorage = new BlobStorage(logger);
+
 DB.initialize().then(() => {
         logger.info('connected', 'DB');
 }).catch((error) => logger.fatal(error.stack + "\n\n*** This error is fatal, a Database is needed for the website to run.", 'DB'));
@@ -45,17 +55,26 @@ const port = config.port || 80;
 
 const app = express();
 app.set('trust proxy', 1);
-app.use(cookierParser(config.secret));
-app.use(session({
+app.use(cookieParser(config.secret));
+/*app.use(session({
     secret: config.secret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
+    cookie: { secure: true },
     store: new TypeormStore({
         cleanupLimit: 2,
         limitSubquery: false, // If using MariaDB.
         ttl: 86400
     }).connect(sessionRepository)
 }));
+*/
+
+app.use(session({
+    secret: config.secret,
+    saveUninitialized: true,
+    resave: true,
+}))
+
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
@@ -69,48 +88,38 @@ app.listen(port, () => {
 
 app.use(routeLogger(logger));
 
-const files = fs.readdirSync(path.join(__dirname, 'routes')).filter(file => file.endsWith('.js'));
+const isValidMethod = (method: string) => ['get', 'post', 'put', 'patch', 'delete'].includes(method.toLowerCase());
+
 
 async function main() {
+    const files = fs.readdirSync(path.join(__dirname, 'routes')).filter(file => file.endsWith('.js'));
     for (const file of files) {
         const route = (await import("file://" + path.join(__dirname, 'routes', file))).default;
-        if (route.path && route.router) {
-            let run;
-            if(route.loginRequired) {
-                run = (req: Request, res: Response, next: NextFunction) => {
-                    logger.debug(JSON.stringify(req.session), "DEVDEBUG")
-                    if (!req.session.userId) {
+        if (route.path && route.router && isValidMethod(route.method)) {
+
+            const run = (req: CRequest, res: CResponse) => {
+                if(route.loginRequired) {
+                    if(!req.session.userId) {
                         req.session['redirectTo'] = req.path;
+                        req.session.save((err) => {
+                            if(err) {
+                                logger.error(err, 'Express');
+                            }
+                        });
                         return res.render('mustlogin');
                     } else {
-                        const connectedUser = users.findOne({where: {id: req.session['userId']}});
-                        return route.router(logger)({connectedUser})(req, res, next);
+                        const connectedUser = users.findOne({ where: { id: req.session['userId'] } });
+                        return route.router(req, res, logger, {connectedUser});
                     }
+                } else {
+                    return route.router(req, res, logger, {});
                 }
-            } else {
-                run = route.router(logger)();
             }
 
-            switch(route.method.toLowerCase()) {
-                case 'get':
-                    app.get(route.path, run);
-                    break;
-                case 'post':
-                    app.post(route.path, run);
-                    break;
-                case 'put':
-                    app.put(route.path, run);
-                    break;
-                case 'delete':
-                    app.delete(route.path, run);
-                    break;
-                case 'patch':
-                    app.patch(route.path, run);
-                    break;
-                default:
-                    throw new Error(`Invalid method '${route.method}' in file '${file}'`);
-            }
-            logger.info(`Loaded route '${route.path}' with method ${route.method}`, 'Express');
+
+            // @ts-ignore
+            app[route.method.toLowerCase()](route.path, run);
+            logger.info(`Loaded route '${route.path}' (${route.method.toUpperCase()})`, 'Express');
         }
     }
 }
@@ -119,22 +128,29 @@ async function main() {
 
 
 class Err extends Error {
-    public status: number = 501;
+    public status: number = 500;
 
     constructor(message: string) {
         super(message);
     };
 }
+
 main().then(() => {
     app.post('/register', registerPost);
 
-    app.use((req, res, next) => {
+
+    app.use((req: CRequest, res: CResponse, next) => {
+        console.log("Debug 1");
         const error = new Err("Not found");
         error.status = 404;
-        next(error);
+        console.log(next);
+        req.error = error;
+        next();
     });
 
-    app.use((error: Err, req: express.Request, res: express.Response) => {
+    app.use((req: CRequest, res: CResponse) => {
+        console.log(req.error);
+        let error = (!req.error ? new Err("Internal Server Error") : req.error) as Err;
         if(error.status === 404) {
             res.status(404).render("404");
         } else {
@@ -146,7 +162,12 @@ main().then(() => {
             });
         }
     });
+}).catch((error) => {
+    logger.fatal(error.stack + "\n\n**** FATAL: The website needs to be loaded.", 'Express');
 });
 
-
-
+export {
+    app,
+    logger,
+    avatarStorage
+}

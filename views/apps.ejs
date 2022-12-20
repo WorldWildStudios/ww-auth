@@ -5,8 +5,13 @@
     <title>Apps</title>
 </head>
 <body>
-    <% for (const app of apps) { %>
-        <h1><%= app.name %></h1>
-    <% } %>
+    <div class="apps">
+        <% for (const app of apps) { %>
+            <div class="app">
+                <h1><%= app.name %></h1>
+                <p><%= app.description.slice(0, 500) %></p>
+            </div>
+        <% } %>
+    </div>
 </body>
 </html>

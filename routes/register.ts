@@ -4,11 +4,7 @@ import Logger from '../structures/Logger.js';
 export default {
     path: '/register',
     method: 'GET',
-    router: (logger: Logger) => {
-        return (data = {}) => {
-            return async (req: Request, res: Response) => {
-                res.render('register');
-            };
-        };
+    router: async (req: Request, res: Response, logger: Logger, data={}) => {
+        res.render('register');
     }
 };
