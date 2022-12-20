@@ -4,7 +4,7 @@ import config from './config.js';
 import 'reflect-metadata';
 import Logger from './structures/Logger.js';
 import session, {Session, SessionData} from 'express-session';
-import { TypeormStore } from "connect-typeorm";
+import {TypeormStore} from "connect-typeorm";
 import {DB, users, sessionRepository} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
@@ -53,7 +53,7 @@ const port = config.port || 80;
 const app = express();
 app.set('trust proxy', 1);
 app.use(cookieParser(config.secret));
-app.use(session({
+/*app.use(session({
     secret: config.secret,
     resave: false,
     saveUninitialized: true,
@@ -64,6 +64,14 @@ app.use(session({
         ttl: 86400
     }).connect(sessionRepository)
 }));
+*/
+
+app.use(session({
+    secret: config.secret,
+    saveUninitialized: true,
+    resave: true,
+}))
+
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
@@ -124,6 +132,7 @@ class Err extends Error {
         super(message);
     };
 }
+
 main().then(() => {
     app.post('/register', registerPost);
 
