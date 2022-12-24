@@ -4,7 +4,6 @@ import config from './config.js';
 import 'reflect-metadata';
 import Logger from './structures/Logger.js';
 import session, {Session, SessionData} from 'express-session';
-import {TypeormStore} from "connect-typeorm";
 import {DB, users, sessionRepository} from './models/entities/Database.js';
 import * as url from 'url';
 import registerPost from './controllers/RegisterPost.js';
@@ -12,7 +11,7 @@ import routeLogger from './controllers/routeLogger.js';
 import cookieParser from 'cookie-parser';
 import fs from "fs";
 import * as Express from 'express';
-import BlobStorage from "./structures/BlobStorage";
+import BlobStorage from "./structures/BlobStorage.js";
 
 // @ts-ignore
 export interface CRequest extends Express.Request {
@@ -66,8 +65,13 @@ app.use(cookieParser(config.secret));
         limitSubquery: false, // If using MariaDB.
         ttl: 86400
     }).connect(sessionRepository)
-}));
-*/
+}));*/
+
+app.use(session({
+    secret: config.secret,
+    saveUninitialized: true,
+    resave: true,
+}))
 
 app.use(session({
     secret: config.secret,

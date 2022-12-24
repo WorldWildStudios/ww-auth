@@ -14,9 +14,18 @@
         <input class="form-input-text" type="text" name="name" id="name" placeholder="A cool name (WorldWild Studios for example)">
     </div>
     <div class="field">
+        <label class="label" for="logo">Logo</label>
+        <input type="image" name="logo" id="logo" src="https://via.placeholder.com/150">
+    </div>
+    <div class="field">
+        <label class="label" for="description">Description</label>
+        <textarea class="form-input-textarea" name="description" id="description" placeholder="A cool description"></textarea>
+    </div>
+    <div class="field">
         <label class="label" for="redirect">Redirect URL</label>
         <input class="form-input-text" type="text" name="redirect" id="redirect" placeholder="https://myapp.com/">
     </div>
+
     <div class="field">
         <label class="label" for="postReceive">Post Request Receive URL</label>
         <input class="form-input-text" type="text" name="postReceive" id="postReceive" placeholder="https://myapp.con/auth">
@@ -25,6 +34,7 @@
             <button type="submit" class="btn btn-success btn-icon"><i class="bi bi-person-plus-fill"></i> Register</button>
         </div>
     </div>
+
 </form>
 </body>
 </html>

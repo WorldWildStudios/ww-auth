@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as azure from "@azure/storage-blob";
 import config from '../config.js';
 import fs from 'fs';
@@ -22,11 +23,11 @@ export default class BlobStorage {
         const blockBlob = this._avatarContainerClient.getBlockBlobClient(uuid + ".png");
         if (file) await blockBlob.uploadFile(file);
         else if (url) {
-            const res = await fetch(url).catch((err) => {
+            const res = await fetch(url as string).catch((err) => {
                 return err;
             });
-            if (res.body) {
-                const buffer = await res.arrayBuffer();
+            if (res?.body) {
+                const buffer = await res?.arrayBuffer();
                 await blockBlob.uploadData(buffer);
             } else {
                 return new Error("Invalid URL");

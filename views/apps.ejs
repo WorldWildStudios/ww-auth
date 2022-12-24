@@ -9,9 +9,14 @@
         <% for (const app of apps) { %>
             <div class="app">
                 <h1><%= app.name %></h1>
-                <p><%= app.description.slice(0, 500) %></p>
+                <p><%= (app.description ? app.description : "Default description").slice(0, 500) %></p>
             </div>
         <% } %>
+        <button class="app" onclick="window.location.href = '/registerapp'" style="cursor: pointer;">
+            <h1>
+                <i class="bi bi-plus-lg"></i> Nouvelle application
+            </h1>
+        </button>
     </div>
 </body>
 </html>
